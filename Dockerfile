@@ -9,7 +9,7 @@ RUN mvn package -DskipTests
 FROM registry.access.redhat.com/ubi8/openjdk-21:1.23
 ENV LANGUAGE='en_US:en'
 
-WORKDIR /deployments
+WORKDIR /
 # Copiamos os arquivos gerados no estágio anterior (build)
 COPY --from=build /usr/src/app/target/quarkus-app/lib/ /deployments/lib/
 COPY --from=build /usr/src/app/target/quarkus-app/*.jar /deployments/
