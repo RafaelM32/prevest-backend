@@ -1,5 +1,12 @@
-*
+# Ignorar arquivos desnecessários do Docker
+target/*
 !target/*-runner
 !target/*-runner.jar
 !target/lib/*
 !target/quarkus-app/*
+.git/
+.mvn/
+node_modules/
+*.md
+.env*
+!.env.example
