@@ -1,7 +1,7 @@
 ## Estágio 1: Build (Compilação)
 FROM maven:3.9.6-eclipse-temurin-21 AS build
-COPY . /
-WORKDIR /
+COPY . /code
+WORKDIR /code
 # Executa o build do Quarkus gerando o fast-jar
 RUN mvn package -DskipTests
 
@@ -9,12 +9,12 @@ RUN mvn package -DskipTests
 FROM registry.access.redhat.com/ubi8/openjdk-21:1.23
 ENV LANGUAGE='en_US:en'
 
-WORKDIR /
+WORKDIR /code
 # Copiamos os arquivos gerados no estágio anterior (build)
-COPY --from=build /usr/src/app/target/quarkus-app/lib/ /deployments/lib/
-COPY --from=build /usr/src/app/target/quarkus-app/*.jar /deployments/
-COPY --from=build /usr/src/app/target/quarkus-app/app/ /deployments/app/
-COPY --from=build /usr/src/app/target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --from=build /code/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=build /code/target/quarkus-app/*.jar /deployments/
+COPY --from=build /code/target/quarkus-app/app/ /deployments/app/
+COPY --from=build /code/target/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 USER 185
