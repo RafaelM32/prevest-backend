@@ -44,7 +44,9 @@ public class UsuariosRepository {
 
 
     public void cadastrarUsuario(String email, String senha, String dataNascimento, String cpf, String tipoUsuarioId, String fotoUrl, String nome, String telefone) throws SQLException {
-        String sql = "INSERT INTO USUARIOS (cpf, nome, email, senha, telefone, data_nascimento, tipo_usuario, imagem_perfil) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIOS (cpf, nome, email, senha, telefone, data_nascimento, tipo_usuario, imagem_perfil) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        boolean isAdmin = TipoUsuarioEnum.valueOf(tipoUsuarioId) == TipoUsuarioEnum.ADMINISTRADOR;
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -55,10 +57,18 @@ public class UsuariosRepository {
             statement.setString(4, senha);
             statement.setString(5, telefone);
             statement.setDate(6, Util.parseDate(dataNascimento));
-            statement.setLong(7, TipoUsuarioEnum.valueOf(tipoUsuarioId).getId());
+            if(isAdmin) {
+                statement.setNull(7, 0);
+            }else {
+                statement.setLong(7, TipoUsuarioEnum.valueOf(tipoUsuarioId).getId());
+            }
             statement.setString(8, fotoUrl);
 
             statement.executeUpdate();
+
+            if(isAdmin) {
+                adicionarRequisicaoAdm(cpf);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,6 +89,20 @@ public class UsuariosRepository {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void adicionarRequisicaoAdm(String cpf){
+        String sql = "INSERT INTO REQUISICOES_ADM (cpf) VALUES (?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, cpf);
+            statement.executeUpdate();
+            System.out.println("Requisição de administrador adicionada para CPF: " + cpf);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
