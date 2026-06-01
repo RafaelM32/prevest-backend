@@ -59,7 +59,7 @@ public class CadastroResource {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LOG.error("Deu erro ao cadastrar: ", e);
+            LOG.info("Deu erro ao cadastrar: ", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"error\": \"Erro ao cadastrar usuário: " + e.getMessage() + "\"}")
                     .build();
