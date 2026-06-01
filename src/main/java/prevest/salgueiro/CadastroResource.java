@@ -12,10 +12,14 @@ import prevest.salgueiro.util.CpfUtil;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.FormParam;
 
+import org.jboss.logging.Logger
+
 import prevest.salgueiro.util.CriptoUtil;
 
 @Path("/api/cadastro")
 public class CadastroResource {
+    
+    private static final Logger LOG = Logger.getLogger(CadastroResource.class);
 
     @Inject
     UsuariosRepository usuariosRepository;
@@ -55,6 +59,7 @@ public class CadastroResource {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            LOG.error("Deu erro ao cadastrar: ", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"error\": \"Erro ao cadastrar usuário: " + e.getMessage() + "\"}")
                     .build();
