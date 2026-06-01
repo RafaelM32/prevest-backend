@@ -12,7 +12,7 @@ import prevest.salgueiro.util.CpfUtil;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.FormParam;
 
-import org.jboss.logging.Logger
+import org.jboss.logging.Logger;
 
 import prevest.salgueiro.util.CriptoUtil;
 
