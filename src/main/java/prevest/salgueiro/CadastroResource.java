@@ -12,6 +12,8 @@ import prevest.salgueiro.util.CpfUtil;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.FormParam;
 
+import prevest.salgueiro.util.CriptoUtil;
+
 @Path("/api/cadastro")
 public class CadastroResource {
 
@@ -43,9 +45,11 @@ public class CadastroResource {
                     return Response.status(Response.Status.CONFLICT)
                             .entity("{\"error\": \"Usuário com este CPF já cadastrado\"}")
                             .build();
-                }
+            }
+                
+                String senhaCriptografada = CriptoUtil.criptografarSenha(senha);
 
-                usuariosRepository.cadastrarUsuario(email, senha, dataNascimento, cpf, tipoUsuario,
+                usuariosRepository.cadastrarUsuario(email, senhaCriptografada, dataNascimento, cpf, tipoUsuario,
                         null, nome, telefone);
                 return Response.ok("{\"message\": \"Cadastro realizado com sucesso\"}").build();
             }
