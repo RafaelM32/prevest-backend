@@ -40,12 +40,14 @@ public class CadastroResource {
         try {
 
             if (!CpfUtil.isValidCPF(cpf)) {
+                LOG.error("CPF invalido");
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"error\": \"CPF inválido\"}")
                         .build();
             } else {
 
                 if(usuariosRepository.usuarioJaCadastrado(cpf)) {
+                    LOG.info("Cliente ja cadastrado");
                     return Response.status(Response.Status.CONFLICT)
                             .entity("{\"error\": \"Usuário com este CPF já cadastrado\"}")
                             .build();
